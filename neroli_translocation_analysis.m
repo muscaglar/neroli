@@ -19,6 +19,7 @@ if isempty(varargin)
 else
     keep_mat_files = dir(fullfile(fileroot, '*.mat'));
 end
+
 [good_translocations,ecds] = neroli_translocation(fileroot,keep_mat_files);
 
 end

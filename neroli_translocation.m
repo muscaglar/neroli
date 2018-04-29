@@ -1,7 +1,7 @@
 function [good_translocations,ecds] = neroli_translocation(fileroot,files)
 
 % fileroot = uigetdir('CoolWater Mat File Selector');
-% 
+%
 % files = dir(fullfile(fileroot, '*.mat'));
 trans = 1;
 
@@ -10,6 +10,10 @@ ecd = containers.Map('KeyType','double','ValueType','any');
 
 voltage = [];
 current = [];
+
+fs=250e3;
+fc = 500;
+order = 6;
 
 for j = 1:length(files)
     
@@ -23,22 +27,12 @@ for j = 1:length(files)
     
     time = 0:1/100000:2000;
     time = time(1:length(current));
-    fil_current = butterworth_filter(300,100e3, current,'low');
-    
-%     [b,a] = butter(6,[32e3/(100e3/2) 40e3/(100e3/2)],'stop');
-%     notch_current = filtfilt(b,a,current);
-%     [b,a] = butter(1,[15/(100e3/2) 25/(100e3/2)],'stop');
-%     notch_current = filtfilt(b,a,notch_current);
-%     
-%     wo = 50/(100e3/2);  bw = wo/35;
-%     [b,a] = iirnotch(wo,bw);
-    
-%   notch_current = butterworth_filter(30e3,100e3, current,'low');
+    fil_current  = neroli_filter(fc,fs,current,'low',order);
     
     [TF,P] = islocalmin(fil_current);
     
     for x = 1:length(TF)
-        if(P(x)<0.006)
+        if(P(x)<0.06)
             TF(x) = 0;
         end
     end
