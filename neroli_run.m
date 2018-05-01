@@ -9,9 +9,10 @@ voltage = [];
 
 all_translocations = containers.Map('KeyType','double','ValueType','any');
 ecd = containers.Map('KeyType','double','ValueType','any');
+
 fs=150e3;
-fc = 500;
-order = 6;
+fc = 1e3;
+order = 2;
 trans = 1;
 
 all_time = 1:1/150e3:100;
@@ -25,10 +26,14 @@ for j = 1:length(files)
     end
     
     load(filepath);
-    voltage = voltage_cut;
-    current = current_cut;
+    
+    if(sum(isnan(voltage))<1)
+        voltage = voltage_cut;
+        current = current_cut;
+    end
     
     [trace_runs] = neroli_compartmentalise(current,voltage);
+    
     for i=1:length(trace_runs)
         
         current = trace_runs(i);
@@ -36,17 +41,18 @@ for j = 1:length(files)
         if(length(current)>10)
             
             time = all_time(1:length(current));
-            
-            
+          
             fil_current  = neroli_filter(fc,fs,current,'low',order);
+                     
+            [TF,P] = islocalmin(fil_current,'MinProminence',0.8);
             
-            [TF,P] = islocalmin(fil_current);
-            
-            for x = 1:length(TF)
-                if(P(x)<1)
-                    TF(x) = 0;
-                end
-            end
+            %             for x = 1:length(TF)
+            %                 if(P(x)<1)
+            %                     TF(x) = 0;
+            %                 end
+            %             end
+            plot(time,fil_current,time(TF),fil_current(TF),'r*');
+            figure;
             plot(time,current,time(TF),current(TF),'r*');
             padValue= 200;
             
@@ -98,4 +104,5 @@ override = 1;
 [good_translocations] = neroli_see_translocations(all_translocations,override);
 
 [ecds,mean_drop,time_drop] = neroli_ECD(good_translocations);
+
 end
