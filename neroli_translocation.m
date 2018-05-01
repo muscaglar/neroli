@@ -29,13 +29,7 @@ for j = 1:length(files)
     time = time(1:length(current));
     fil_current  = neroli_filter(fc,fs,current,'low',order);
     
-    [TF,P] = islocalmin(fil_current);
-    
-    for x = 1:length(TF)
-        if(P(x)<0.06)
-            TF(x) = 0;
-        end
-    end
+    [TF,P] = islocalmin(fil_current,'MinProminence',0.06);
     
     padValue= 125;
     

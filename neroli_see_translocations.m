@@ -1,18 +1,22 @@
-function [good_translocations] = neroli_see_translocations(all_translocations)
+function [good_translocations] = neroli_see_translocations(all_translocations,override)
 
 good_translocations = containers.Map('KeyType','double','ValueType','any');
 x = 1;
-for i = 1:length(all_translocations)
-    data = all_translocations(i);
-    plot(data(:,2),data(:,1));
-    answer = coolwater_questdlg( [ 0.5 , 0.3 ],'Is this a good translocation?','Translocation Picker','Yes','No','Cancel','Cancel');
-    switch answer
-        case 'No'     
-        case 'Yes'
-            good_translocations(x) = data;
-            x=x+1;
-        case 'Cancel'
-            break;
+if(override)
+    good_translocations = all_translocations;
+else
+    for i = 1:length(all_translocations)
+        data = all_translocations(i);
+        plot(data(:,2),data(:,1));
+        answer = coolwater_questdlg( [ 0.5 , 0.3 ],'Is this a good translocation?','Translocation Picker','Yes','No','Cancel','Cancel');
+        switch answer
+            case 'No'
+            case 'Yes'
+                good_translocations(x) = data;
+                x=x+1;
+            case 'Cancel'
+                break;
+        end
     end
 end
 % area = [];

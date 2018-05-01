@@ -1,11 +1,8 @@
-function [time_drop] = neroli_find_time(data)
+function [time_drop,end_data,start_data] = neroli_find_time(data,time)
 
-window = 2;
+window = 20;
 
 initial_data = mean(data(1:window));
-
-time = (data(:,2));
-data = (data(:,1));
 
 start_data = 1;
 end_data = length(data);
@@ -26,7 +23,8 @@ for i = 1:window:length(time)-(window+1)
         break
     end
 end
-
-time_drop = time(end_data)-time(start_data);
+end_time = time(end_data);
+start_time = time(start_data);
+time_drop = end_time-start_time;
 
 end
