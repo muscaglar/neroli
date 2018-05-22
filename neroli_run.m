@@ -46,11 +46,7 @@ for j = 1:length(files)
                      
             [TF,P] = islocalmin(fil_current,'MinProminence',0.8);
             
-            %             for x = 1:length(TF)
-            %                 if(P(x)<1)
-            %                     TF(x) = 0;
-            %                 end
-            %             end
+
             plot(time,fil_current,time(TF),fil_current(TF),'r*');
             figure;
             plot(time,current,time(TF),current(TF),'r*');

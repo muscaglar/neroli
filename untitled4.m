@@ -8,13 +8,13 @@ fs=100000;
 fc = 500;
 order = 2;
 
-time = 0:1/fs:(length(current)-1)/fs;
-[current, ~] = neroli_remove_base(current,fs);
-fil_current  = neroli_filter(fc,fs,current,'low',order);
+%time = 0:1/fs:(length(current)-1)/fs;
+%[current, ~] = neroli_remove_base(current,fs);
+%fil_current  = neroli_filter(fc,fs,current,'low',order);
 
-[TF,P] = islocalmin(fil_current,'MinProminence',0.15);
+[TF,P] = islocalmin(fil_current,'MinProminence',0.25);
 
-padValue= 1;
+padValue= 500;
 
 for i = 1:length(TF)-1
     if(TF(i)== 1 && TF(i-1)==0)
@@ -55,6 +55,6 @@ while ( i<length(TF))
 end
 
 
-[good_translocations] = neroli_see_translocations(all_translocations);
+[good_translocations] = neroli_see_translocations(all_translocations,0);
 
 [ecds] = neroli_ECD(good_translocations);

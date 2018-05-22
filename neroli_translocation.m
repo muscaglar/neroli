@@ -1,19 +1,24 @@
 function [good_translocations,ecds] = neroli_translocation(fileroot,files)
 
-% fileroot = uigetdir('CoolWater Mat File Selector');
-%
-% files = dir(fullfile(fileroot, '*.mat'));
+fileroot = uigetdir('CoolWater Mat File Selector');
+files = dir(fullfile(fileroot, '*.mat'));
+
+
 trans = 1;
+
+No  = inputdlg('Enter the sampling rate in Hz');
+fs = str2double(No{1,1});
+No  = inputdlg('Enter the filter corner frequency in Hz');
+fc = str2double(No{1,1});
 
 all_translocations = containers.Map('KeyType','double','ValueType','any');
 ecd = containers.Map('KeyType','double','ValueType','any');
 
+
 voltage = [];
 current = [];
 
-fs=250e3;
-fc = 500;
-order = 6;
+order = 2;
 
 for j = 1:length(files)
     
