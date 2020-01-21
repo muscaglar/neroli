@@ -7,7 +7,7 @@ if(override)
 else
     for i = 1:length(all_translocations)
         data = all_translocations(i);
-        plot(data(:,2),data(:,1));
+        plot(data(2,:),data(1,:));
         answer = coolwater_questdlg( [ 0.5 , 0.3 ],'Is this a good translocation?','Translocation Picker','Yes','No','Cancel','Cancel');
         switch answer
             case 'No'

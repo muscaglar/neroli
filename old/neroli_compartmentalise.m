@@ -20,7 +20,10 @@ while(i<=length(TF))
             end
         end
         finish =i-1;
-        [current_fitted,~] = neroli_remove_base(current(start:finish)',fs);
+        
+        %[current_fitted,~] = neroli_remove_base(current(start:finish)',fs);
+        current_fitted=current(start:finish);
+        
         trace_runs(runs) = current_fitted;
         runs = runs+1;
     else

@@ -21,7 +21,7 @@ if(L > 2)
     nStds = NoStardardDevToDetect; %Loaded From Translocation Limits
     %plot([1 L], [S S],'-r');
     
-    Ahead = 2000;
+    Ahead = 200;
     if Ahead > L
         Ahead = L - 1;
         if(Ahead < 1)

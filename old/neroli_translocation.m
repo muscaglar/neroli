@@ -6,17 +6,20 @@ files = dir(fullfile(fileroot, '*.mat'));
 
 trans = 1;
 
-No  = inputdlg('Enter the sampling rate in Hz');
+No  = inputdlg('Enter the sampling rate in kHz');
 fs = str2double(No{1,1});
-No  = inputdlg('Enter the filter corner frequency in Hz');
+fs = fs*1000;
+No  = inputdlg('Enter the filter corner frequency in kHz');
 fc = str2double(No{1,1});
+fc = fc *1000;
 
 all_translocations = containers.Map('KeyType','double','ValueType','any');
 ecd = containers.Map('KeyType','double','ValueType','any');
 
 
 voltage = [];
-current = [];
+i = [];
+t = [];
 
 order = 2;
 
@@ -29,13 +32,15 @@ for j = 1:length(files)
     end
     
     load(filepath);
-    
-    time = 0:1/100000:2000;
-    time = time(1:length(current));
+    current = i;
+    time = t;
+%     time = 0:1/100000:2000;
+%     time = time(1:length(current));
+
     fil_current  = neroli_filter(fc,fs,current,'low',order);
     
-    [TF,P] = islocalmin(fil_current,'MinProminence',0.06);
-    
+    [TF,P] = islocalmin(fil_current,'MinProminence',0.15);
+     %plot(time,current,time(TF),current(TF),'r*');
     padValue= 125;
     
     for i = 1:length(TF)-1
@@ -58,7 +63,7 @@ for j = 1:length(files)
         end
     end
     
-    %plot(time,current,time(TF),current(TF),'r*');
+   %plot(time,current,time(TF),current(TF),'r*');
     
     i=1;
     while ( i<length(TF))
@@ -77,9 +82,9 @@ for j = 1:length(files)
     end
     
 end
+good_translocations = all_translocations;
+%[good_translocations] = neroli_see_translocations(all_translocations);
 
-[good_translocations] = neroli_see_translocations(all_translocations);
-
-[ecds] = neroli_ECD(good_translocations);
+%[ecds] = neroli_ECD(good_translocations);
 
 end

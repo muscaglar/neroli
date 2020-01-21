@@ -13,19 +13,21 @@ TranslocationLimits
 PlotOn = 0;
 
 %Will load from DB if it exists  - need to somehow test if installed.
-[ TraceDate, TraceNo, TraceObj, TraceID ] = GetTraceDetailsByFName( FileName );
+
+%[ TraceDate, TraceNo, TraceObj, TraceID ] = GetTraceDetailsByFName( FileName );
+TraceID=0;
 if(TraceID > 0)
     SampleRate = TraceObj.getSampleFreq();
 else
-    SampleRate = 2000;
+    SampleRate = 150000;
 end
 %Must ensure that TraceID and sample Rate are set
 
 %TracePlotAndSave(  Data, FileName, FolderName );
 
-if TraceObj.getFilterFreq() > 50
+%if TraceObj.getFilterFreq() > 50
     Data(:,2) = LowPassFilter( Data(:,2) , NumericalFilterFreq , SampleRate );
-end
+%end
 
 %Remove the base line from the signal
 Highpass = HighPassFilter( Data(:,2) );

@@ -1,20 +1,20 @@
-
+function [mean_drop,time_drop,good_translocations] = untitled4(current)
 trans = 1;
 
 all_translocations = containers.Map('KeyType','double','ValueType','any');
 ecd = containers.Map('KeyType','double','ValueType','any');
-
-fs=100000;
+time = 0:1/150e3:(length(current)-1)/150e3;
+fs=150e3;
 fc = 500;
 order = 2;
-
+[new_time,fil_current] = neroli_clean_currentTrace(current);
 %time = 0:1/fs:(length(current)-1)/fs;
 %[current, ~] = neroli_remove_base(current,fs);
 %fil_current  = neroli_filter(fc,fs,current,'low',order);
 
-[TF,P] = islocalmin(fil_current,'MinProminence',0.25);
-
-padValue= 500;
+[TF,P] = islocalmin(fil_current,'MinProminence',0.5);
+%plot(new_time,fil_current,new_time(TF),fil_current(TF),'r*');
+padValue= 250;
 
 for i = 1:length(TF)-1
     if(TF(i)== 1 && TF(i-1)==0)
@@ -36,7 +36,7 @@ for i = length(TF)-1:-1:1
     end
 end
 
-plot(time,current,time(TF),current(TF),'r*');
+%plot(new_time,fil_current,new_time(TF),fil_current(TF),'r*');
 
 i=1;
 while ( i<length(TF))
@@ -44,10 +44,14 @@ while ( i<length(TF))
         case 1
             start = i;
             while (TF(i)==1)
+                if ( i<length(TF))
                 i = i+1;
+                else
+                    break
+                end
             end
             finish =i;
-            all_translocations(trans) = [current(start:finish)',time(start:finish)'];
+            all_translocations(trans) = [fil_current(start:finish),time(start:finish)];
             trans = trans+1;
         case 0
             i = i+1;
@@ -55,6 +59,10 @@ while ( i<length(TF))
 end
 
 
-[good_translocations] = neroli_see_translocations(all_translocations,0);
+[good_translocations] = neroli_see_translocations(all_translocations,1);
 
-[ecds] = neroli_ECD(good_translocations);
+[ecds,mean_drop,time_drop] = neroli_ECD(good_translocations);
+
+scatter(time_drop,mean_drop);
+
+end

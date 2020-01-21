@@ -5,14 +5,14 @@ time = 0:1/150e3:400;
 mean_drop = [];
 time_drop = [];
 dumped = 0;
-movement = 50;
+movement = 25;
 
 for i=1:length(good_translocations)
     data = good_translocations(i);
     x = data(:,1);
     t= time(1:length(x));
     % t = data(:,2);
-    ind = find(x < -0.1);
+    ind = find(x < -0.2);
     try
         if( min(ind) < movement)
             min_ind = 1;
@@ -26,18 +26,29 @@ for i=1:length(good_translocations)
         end
         x = x(min_ind:max_ind);
         time_drop(i) = time(max_ind)-time(min_ind);
-        
-        psdest = psd(spectrum.periodogram,x,'Fs',150e3,'NFFT',length(x));
-        mean_drop(i) = -avgpower(psdest,[1 70e3]);
-        
-        if(mean_drop(i)<-0.5)
-            time_drop(i)=0;
-            mean_drop(i)=0;
-            dumped = dumped+1;
-        end
-        
+%         if(time_drop(i)>4e-3)
+%             time_drop(i)= [];
+%             mean_drop(i)=[];
+%             dump = dump +1;
+%         else
+            %if(i>1500)
+              %  close all; plot(t,x); hold on; plot(t(min_ind),x(min_ind),'*r');plot(t(max_ind),x(max_ind),'*r');
+            %end
+            psdest = psd(spectrum.periodogram,x,'Fs',150e3,'NFFT',length(x));
+            mean_drop(i) = -avgpower(psdest,[1 70e3]);
+            plot(x);
+            % mean_drop(i) = sum(x)*(1/150e3);
+            if(mean_drop(i)>-25e-6)
+                time_drop(i)= [];
+                mean_drop(i)=[];
+                dump = dump +1;
+            end
+       
     catch
+        %time_drop(i)=0;
+        %mean_drop(i)=0;
         dumped = dumped +1;
+     %   plot(x)
     end
     
     %[mean_drop(i),time_drop(i),ecds(i)]=neroli_crude_drop(data,time);

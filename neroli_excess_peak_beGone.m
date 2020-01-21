@@ -1,16 +1,17 @@
-function [ DataOut, Thesholded, PeakLocations ] = OffsetPeakRemoval( RawData, HPFdata, ExtraDistance)
+function [ DataOut, Thesholded, PeakLocations ] = neroli_excess_peak_beGone( RawData, HPFdata, fs)
 %Remove peaks which are due to sudden changes in the data 
 % ie as a result of transients or loos of contact
 % Features wich cannot represent a translocation
 
-if nargin < 3
-ExtraDistance = 100;
-end
+ExtraDistance = fs/3;
 
 [PeakLocations , Thesholded] = ThresholdPeakDetection( HPFdata);
-%plot((Thesholded),'k');
-%plot(PeakLocations,'or');
-%Now use these peak locations to remove them
+% peaks1 = PeakLocations(1,:);
+% peaks2= PeakLocations(2,:);
+% 
+% time = 0:1/150e3:((length(HPFdata)-1)/150e3);
+
+%plot(time,HPFdata);hold on; plot(time(peaks1),HPFdata(peaks1),'*r');
 
 noPeaks = size(PeakLocations,2);
 nd = max(size(RawData));

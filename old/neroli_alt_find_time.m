@@ -11,7 +11,7 @@ end_ind = length(data);
 
 %%extent of baseline
 
-for i = 1:size_data/2
+for i = 1:floor(size_data/2)
     if(isalmost(first_max,data(i),first_max*tolerance))
     else
         start_ind = i;
@@ -19,7 +19,7 @@ for i = 1:size_data/2
     end
 end
 
-for i = size_data/2:size_data
+for i = floor(size_data/2):size_data
     if(isalmost(second_max,data(i),second_max*tolerance))
         end_ind = i;
         break

@@ -1,23 +1,25 @@
-function [  Results, n   ] = ProcessTranslocations( InArg1, InArg2 )
+function [  Results, n   ] = ProcessTranslocations( Result)%InArg1, InArg2 )
 %PROCESSTRANSLOCATIONS Take a vector of Translocation objects and analyse
 %Within this area also want to provide functionality for saving
 %translocations out  - either to DB or dat files - but need them to be
 %retrievable
 
-if nargin == 1
-    if ~isa(InArg1,'Translocation')
-        %Treat as numeric or Path arg
-        Translocations = LoadTranslocations(InArg1);
-    else
-        Translocations = InArg1;
-    end
-elseif nargin == 2
-    %Treat as Date No
-    Translocations = LoadTranslocations(InArg1, InArg2);
-else
-    %Display the UI and load
-    Translocations = LoadTranslocations();
-end
+Translocations = Result;
+
+% if nargin == 1
+%     if ~isa(InArg1,'Translocation')
+%         %Treat as numeric or Path arg
+%         Translocations = LoadTranslocations(InArg1);
+%     else
+%         Translocations = InArg1;
+%     end
+% elseif nargin == 2
+%     %Treat as Date No
+%     Translocations = LoadTranslocations(InArg1, InArg2);
+% else
+%     %Display the UI and load
+%     Translocations = LoadTranslocations();
+% end
 
 n = size(Translocations,1);
 if n > 0
@@ -48,11 +50,15 @@ if n > 0
     %voltage - so I can see affects properly  - ie need to plot
     %translocations separately for each!
     if no_t > 0
-        [Date, fNo] = FileNameInterpret(char(Translocations(1).FileName));
+        
+        %[Date, fNo] = FileNameInterpret(char(Translocations(1).FileName));
         
         DepthToPlot = -1 * MeanDepth;  %THis could also be Depth but doesn't work as well
         
-        PlotTranslocationStatistics( Voltage, DepthToPlot, Time, ECD, ['ID: ' num2str(Translocations(1).TraceID) ' FileName: ' GetDateString( Date ) '_ ' num2str(fNo)], 3, Date, fNo );
+         PlotTranslocationStatistics( Voltage, DepthToPlot, Time, ECD, ' ' , 3, 0, 0 );
+        
+        
+       % PlotTranslocationStatistics( Voltage, DepthToPlot, Time, ECD, ['ID: ' num2str(Translocations(1).TraceID) ' FileName: ' GetDateString( Date ) '_ ' num2str(fNo)], 3, Date, fNo );
         
         Results = [Voltage' Time' DepthToPlot' ECD' Current'];
         

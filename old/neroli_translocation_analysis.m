@@ -8,12 +8,12 @@ function [good_translocations,ecds] = neroli_translocation_analysis(varargin)
 %MAT files in a directory.
 
 fileroot = uigetdir('Neroli File Selector');
-
+s_freq=150000;
 if isempty(varargin)
     
     [files,~] = neroli_file_process(fileroot);
     
-    neroli_TDMS_import(fileroot,files);
+    neroli_TDMS_import(fileroot,files,s_freq);
     
     [~,keep_mat_files] = coolwater_file_process(fileroot);
 else

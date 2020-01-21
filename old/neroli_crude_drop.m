@@ -4,7 +4,9 @@ current_trans = smooth(data(:,1));
 
 time_short = time(1:length(current_trans));
 
-[TF,P] = islocalmin(current_trans,'MinProminence',0.06);
+[TF,P] = islocalmin(current_trans,'MinProminence',0.1);
+
+plot(time_short,current_trans,time_short(TF),current_trans(TF),'r*');
 
 %mean_drop = abs(mean(data(1:5))-mean(data(TF)));
 
